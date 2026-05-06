@@ -2,13 +2,19 @@
 
 {
   # https://devenv.sh/basics/
-  env.GREET = "devenv";
+  env.GREET = "Pumpkin environment";
+  env.MZN_SOLVER_PATH = config.env.DEVENV_ROOT + "/minizinc";
 
   # https://devenv.sh/packages/
   packages = [ pkgs.git ];
 
   # https://devenv.sh/languages/
-  languages.rust.enable = true;
+  languages.rust = {
+    enable = true;
+    channel = "nightly";
+    components = [ "rustc" "cargo" "clippy" "rustfmt" "rust-analyzer" ];
+  };
+  languages.python.enable = true;
 
   # https://devenv.sh/processes/
   # processes.dev.exec = "${lib.getExe pkgs.watchexec} -n -- ls -la";
@@ -18,7 +24,7 @@
 
   # https://devenv.sh/scripts/
   scripts.hello.exec = ''
-    echo hello from $GREET
+    echo Welcome to $GREET
   '';
 
   # https://devenv.sh/basics/
