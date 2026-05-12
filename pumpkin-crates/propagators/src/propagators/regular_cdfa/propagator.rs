@@ -9,20 +9,23 @@ use pumpkin_core::state::PropagationStatusCP;
 use pumpkin_core::variables::IntegerVariable;
 
 #[derive(Clone, Debug)]
-pub struct RegularPropagatorConstructor<Var> {
+pub struct RegularCdfaPropagatorConstructor<Var, CVar> {
     pub sequence: Box<[Var]>,
     pub num_states: u32,
     pub num_inputs: u32,
     pub transition_matrix: Vec<Vec<i32>>,
     pub initial_state: i32,
-    pub accepting_states: Vec<i32>,
+    pub inc: Vec<Vec<i32>>,
+    pub count: CVar,
 
     pub constraint_tag: ConstraintTag,
 }
-declare_inference_label!(RegularDfa);
+declare_inference_label!(RegularCdfa);
 
-impl<Var: IntegerVariable + 'static> PropagatorConstructor for RegularPropagatorConstructor<Var> {
-    type PropagatorImpl = RegularPropagator<Var>;
+impl<Var: IntegerVariable + 'static, CVar: IntegerVariable + 'static> PropagatorConstructor
+    for RegularCdfaPropagatorConstructor<Var, CVar>
+{
+    type PropagatorImpl = RegularCdfaPropagator<Var, CVar>;
 
     fn create(self, context: PropagatorConstructorContext) -> Self::PropagatorImpl {
         todo!()
@@ -30,18 +33,21 @@ impl<Var: IntegerVariable + 'static> PropagatorConstructor for RegularPropagator
 }
 
 #[derive(Clone, Debug)]
-pub struct RegularPropagator<Var> {
-    sequence: Box<[Var]>,
-    num_states: u32,
-    num_inputs: u32,
-    transition_matrix: Vec<Vec<i32>>,
-    initial_state: i32,
-    accepting_states: Vec<i32>,
+pub struct RegularCdfaPropagator<Var, CVar> {
+    pub sequence: Box<[Var]>,
+    pub num_states: u32,
+    pub num_inputs: u32,
+    pub transition_matrix: Vec<Vec<i32>>,
+    pub initial_state: i32,
+    pub inc: Vec<Vec<i32>>,
+    pub count: CVar,
 
     inference_code: InferenceCode,
 }
 
-impl<Var: IntegerVariable + 'static> Propagator for RegularPropagator<Var> {
+impl<Var: IntegerVariable + 'static, CVar: IntegerVariable + 'static> Propagator
+    for RegularCdfaPropagator<Var, CVar>
+{
     fn name(&self) -> &str {
         todo!()
     }
